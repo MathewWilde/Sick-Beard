@@ -1,68 +1,0 @@
-
-Ñò
-åPˆRc           @   s  d  d k  Z  d  d k Z d  d k Z d  d k l Z l Z l Z d  d k l Z d  d k l Z d  d k	 l
- Z
- l Z d  d k l
- Z
- l Z y d  d k Z Wn# e j
- o d  d k l Z n Xd e i f d	 „  ƒ  YZ d
- e i f d „  ƒ  YZ e ƒ  Z d S(   iÿÿÿÿN(   t   loggert   tvcachet
-   exceptions(   t   helpers(   t   Quality(   t   ext
-   AuthException(   t
-   NameParsert   InvalidNameException(   t
-   simplejsont   HDBitsProviderc           B   sS   e  Z d  „  Z d „  Z d „  Z d „  Z e d „ Z d „  Z d d d d „ Z
- RS(   c         C   sS   t  i i |  d ƒ t |  _ t |  ƒ |  _ d |  _ d |  _ d |  _	 d |  _
- d  S(   Nt   HDBitss   https://hdbits.orgs   https://hdbits.ro/api/torrentss   http://hdbits.ro/download.php?(   t   generict   TorrentProvidert   __init__t   Falset   supportsBacklogt   HDBitsCachet   cachet   urlt
-   search_urlt   rss_urlt   download_url(   t   self(    (    s   sickbeard\providers\hdbits.pyoR   "   s    				c         C   s   t  i S(   N(   t	   sickbeardt   HDBITS(   R   (    (    s   sickbeard\providers\hdbits.pyot	   isEnabled/   s    c         C   s5   t  i p t  i o t d |  i d ƒ ‚ n t S(   Ns$   Your authentication credentials for s     are missing, check your config.(   R   t   HDBITS_USERNAMEt   HDBITS_PASSKEYR   t   namet   True(   R   (    (    s   sickbeard\providers\hdbits.pyot
-   _checkAuth2   s    c         C   s‘   | d  j o |  i ƒ  Sd | j oh d | j o[ | i d ƒ d j oA t i d |  i d | d t i ƒ t d |  i d ƒ ‚ q n t S(   Nt   statust   messagei   u)   Incorrect authentication credentials for s    : s$   Your authentication credentials for s"    are incorrect, check your config.(	   t   NoneR   t   getR    t   logR   t   DEBUGR   R   (   R   t
-   parsedJSON(    (    s   sickbeard\providers\hdbits.pyot   _checkAuthFromData9   s    
-&c      	   C   sY  t  i d |  i d | i ƒ  ƒ |  i i ƒ  |  i i | | ƒ } t  i d t | ƒ t  i ƒ | p | o | S|  i	 |  i
- d |  i d | i d | ƒ ƒ} | p t  i d |  i
- t  i
- ƒ g  St i | ƒ } | d  j o# t  i d |  i d	 t  i
- ƒ g  S|  i | ƒ o>g  } | o d
- | j o | d
- } n% t  i d |  i d t  i
- ƒ g  } xï| D]ã} |  i | ƒ \ } }	 y t ƒ  }
- |
- i | ƒ } Wn1 t j
- o% t  i d
- | d t  i ƒ qjn X| i i oJ | i | i j o3 t  i d | d t | i ƒ d t  i ƒ qjq–nk | i | i j p | i | i j oD t  i d | d t | i ƒ d t | i ƒ d t  i ƒ qjn |  i | ƒ } | i i | i | i | | ƒ p- t  i d | d t  i! | t  i ƒ qjn t  i d | d |	 t  i ƒ |  i" | g ƒ }
- |	 |
- _# | |
- _ | |
- _$ | i% |
- ƒ qjWn | S(   Nu
-   Searching s    for u   Cache results: t	   post_datat   showt   episodeu   No data returned from u   Error trying to load s
-    JSON datat   datau   Resulting JSON from s    isn't correct, not parsing itu   Unable to parse the filename s    into a valid episodeu   Episode s    didn't air on s
-   , skipping its    isn't t   xu   Ignoring result s*    because we don't want an episode that is u
-   Found result s    at (&   R    R$   R   t
-   prettyNameR   t   updateCachet   searchCachet   strR%   t   getURLR   t   _make_post_data_JSONR)   t   ERRORR   t
-   parse_jsonR"   R'   t   _get_title_and_urlR   t   parseR   t   WARNINGt   air_by_datet   air_datet   airdatet
-   season_numbert   seasonR*   t   episode_numberst
-   getQualityt   wantEpisodeR   t   qualityStringst	   getResultR   t   qualityt   append(   R   R*   t   manualSearcht   resultsR+   R&   t   itemst   itemt   titleR   t   myParsert   parse_resultRB   t   result(    (    s   sickbeard\providers\hdbits.pyot   findEpisodeE   s^    "
--
- 	
-,&="&			c         C   s?   | d } |  i  t i h | d d 6t i d 6ƒ } | | f S(   NR   t   idt   passkey(   R   t   urllibt	   urlencodeR   R   (   R   RG   RH   R   (    (    s   sickbeard\providers\hdbits.pyoR5      s    
-+c         C   sŠ   h t  i d 6t  i d 6d g d 6} | o, h | i d 6| i d 6| i d 6| d <n | o h | i d 6| d 6| d <n t i | ƒ S(	   Nt   usernameRN   i   t   categoryRM   R<   R*   t   tvdb(   R   R   R   t   tvdbidR<   R*   t   jsont   dumps(   R   R)   R*   R<   R(   (    (    s   sickbeard\providers\hdbits.pyoR2   ”   s    
-
-
-
-
-
-N(   t   __name__t
-   __module__R   R   R   R'   R   RL   R5   R"   R2   (    (    (    s   sickbeard\providers\hdbits.pyoR
-       s   	
-			H	R   c           B   s5   e  Z d  „  Z d „  Z d „  Z d „  Z d „  Z RS(   c         C   s    t  i i |  | ƒ d |  _ d  S(   Ni   (   R   t   TVCacheR   t   minTime(   R   t   provider(    (    s   sickbeard\providers\hdbits.pyoR   ®   s    c         C   sP  |  i  ƒ  p d  S|  i d  ƒ o&|  i ƒ  } | o |  i ƒ  n g  St i d |  i i d ƒ |  i	 ƒ  t
- i | ƒ } | d  j o& t i d |  i i d t i ƒ g  S|  i | ƒ oi | o d | j o | d } n& t i d |  i i d t i ƒ g  Sx< | D] } |  i
- | ƒ qWqLt i d |  i i d	 ƒ ‚ n g  Sd  S(
-   Nu	   Clearing s(    cache and updating with new informationu   Error trying to load s
-    JSON feedR+   u   Resulting JSON from s    isn't correct, not parsing its   Your authentication info for s     is incorrect, check your config(   t   shouldUpdateR   R"   t   _getRSSDatat
-   setLastUpdateR    R$   R[   R   t   _clearCacheR   R4   R3   t
-   _parseItemR   R   (   R   R+   R&   RF   RG   (    (    s   sickbeard\providers\hdbits.pyoR.   µ   s.    
-
-
-!! !c         C   s%   |  i  i |  i  i d |  i  i ƒ  ƒS(   NR(   (   R[   R1   R   R2   (   R   (    (    s   sickbeard\providers\hdbits.pyoR]   Ý   s    c         C   sz   |  i  i | ƒ \ } } | o2 | o+ t i d | t i ƒ |  i | | ƒ n& t i d |  i  i d t i ƒ d  Sd  S(   Nu   Adding item to results: u   The data returned from the s'    is incomplete, this result is unusable(   R[   R5   R    R$   R%   t   _addCacheEntryR   R3   (   R   RG   RH   R   (    (    s   sickbeard\providers\hdbits.pyoR`   à   s    !c         C   s   |  i  i | ƒ S(   N(   R[   R'   (   R   R+   (    (    s   sickbeard\providers\hdbits.pyoR   ë   s    (   RW   RX   R   R.   R]   R`   R   (    (    (    s   sickbeard\providers\hdbits.pyoR   ¬   s
-   		(		(   RO   R   R   R    R   R   R   t   sickbeard.commonR   t   sickbeard.exceptionsR   R   t   sickbeard.name_parser.parserR   R   RU   t   ImportErrort   libR	   R
-   R
-   RY   R   R[   (    (    (    s   sickbeard\providers\hdbits.pyot   <module>   s   ŒB
